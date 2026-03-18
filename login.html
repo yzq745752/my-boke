@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 · 静墨散记</title>
+    <!-- 风格延续主博客：Inter字体、青绿点缀、圆角卡片、柔和阴影 -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9f2f7 0%, #d3e3ed 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            line-height: 1.5;
+            color: #0b1c2e;
+        }
+
+        /* 登录卡片 — 仿博客卡片设计，加了一点玻璃态 */
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            max-width: 460px;
+            width: 100%;
+            border-radius: 40px;
+            padding: 2.8rem 2.5rem;
+            box-shadow: 0 30px 50px -20px rgba(0, 40, 60, 0.3),
+                        0 0 0 1px rgba(150, 188, 200, 0.2) inset;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: transform 0.2s;
+        }
+
+        .login-card:hover {
+            transform: scale(1.01);
+        }
+
+        /* 头部标识，与博客navbar logo 呼应 */
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .login-logo a {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #0f1a24;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .login-logo span {
+            color: #5dd4b0; /* 青绿点缀 */
+        }
+        .login-logo p {
+            color: #3b5f72;
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        /* 标题 */
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.3rem;
+        }
+        .login-header h2 {
+            font-size: 2rem;
+            font-weight: 550;
+            color: #092734;
+            margin-bottom: 0.4rem;
+        }
+        .login-header p {
+            color: #4c6f82;
+            font-size: 0.95rem;
+        }
+
+        /* 表单 */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .input-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1f4457;
+            letter-spacing: 0.2px;
+            margin-left: 0.5rem;
+        }
+        .input-group input {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1.5px solid #c6dae7;
+            border-radius: 40px;
+            padding: 0.9rem 1.5rem;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .input-group input:focus {
+            border-color: #5dd4b0;
+            box-shadow: 0 0 0 3px rgba(93, 212, 176, 0.2);
+        }
+
+        /* 附加选项（记住我 + 忘记密码） */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2d5b6e;
+            cursor: pointer;
+        }
+        .remember-me input[type="checkbox"] {
+            accent-color: #5dd4b0;
+            width: 1rem;
+            height: 1rem;
+            cursor: pointer;
+        }
+        .forgot-link {
+            color: #0e6b7a;
+            text-decoration: none;
+            border-bottom: 1px dotted #8db4c2;
+            padding-bottom: 1px;
+        }
+        .forgot-link:hover {
+            color: #064956;
+            border-bottom: 1px solid;
+        }
+
+        /* 登录按钮 */
+        .login-btn {
+            background-color: #1f3e4b;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            border: 1px solid #235b6b;
+            margin-top: 0.8rem;
+            font-family: 'Inter', sans-serif;
+        }
+        .login-btn:hover {
+            background-color: #2c5568;
+            transform: scale(1.01);
+        }
+
+        /* 分割线 */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #7b9bae;
+            font-size: 0.8rem;
+            margin: 1.5rem 0 1.2rem;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px dashed #c0d3df;
+        }
+        .divider span {
+            margin: 0 0.8rem;
+        }
+
+        /* 第三方登录（轻量，仿博客标签云风格） */
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .social-btn {
+            background-color: #ecf3f8;
+            border: 1px solid #bdd2e0;
+            border-radius: 50px;
+            padding: 0.7rem 1.8rem;
+            text-decoration: none;
+            color: #1c4b5e;
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+        }
+        .social-btn:hover {
+            background-color: #d7e6f0;
+            border-color: #8fc0d4;
+        }
+
+        /* 注册引导 */
+        .signup-prompt {
+            text-align: center;
+            color: #386982;
+            font-size: 0.95rem;
+        }
+        .signup-prompt a {
+            color: #0f6f7e;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 2px solid #b1dfd2;
+        }
+        .signup-prompt a:hover {
+            color: #05424b;
+            border-bottom-color: #5dd4b0;
+        }
+
+        /* 返回博客链接 (小导航) */
+        .back-to-blog {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .back-to-blog a {
+            color: #446f84;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-bottom: 1px dotted #9abbcb;
+            padding-bottom: 2px;
+        }
+        .back-to-blog a:hover {
+            color: #1a4b5e;
+        }
+
+        /* 页脚装饰 */
+        .login-footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #6d8b9c;
+            text-align: center;
+        }
+        .login-footer a {
+            color: #558397;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <!-- 与博客头部一致的logo -->
+        <div class="login-logo">
+            <a href="#">静墨·<span>散记</span></a>
+            <p>登录你的数字花园</p>
+        </div>
+
+        <div class="login-header">
+            <h2>欢迎回来</h2>
+            <p>使用账号或第三方继续</p>
+        </div>
+
+        <!-- 登录表单 (示例，无实际提交) -->
+        <form class="login-form" onsubmit="event.preventDefault(); alert('登录演示：实际开发中会连接后端。');">
+            <div class="input-group">
+                <label for="email">邮箱 / 用户名</label>
+                <input type="email" id="email" placeholder="your@email.com" required>
+            </div>
+            <div class="input-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" placeholder="········" required>
+            </div>
+
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" checked> 记住此设备
+                </label>
+                <a href="#" class="forgot-link">忘记密码？</a>
+            </div>
+
+            <button type="submit" class="login-btn">登录 · 进入花园</button>
+        </form>
+
+        <!-- 分割线 + 第三方登录（类似博客的标签云设计） -->
+        <div class="divider">
+            <span>或使用以下方式</span>
+        </div>
+
+        <div class="social-login">
+            <a href="#" class="social-btn" onclick="alert('GitHub登录演示')">🐙 GitHub</a>
+            <a href="#" class="social-btn" onclick="alert('Google登录演示')">📧 Google</a>
+        </div>
+
+        <!-- 注册引导 -->
+        <div class="signup-prompt">
+            还没有账号？ <a href="#" onclick="alert('跳转注册页面 (演示)')">立即注册</a>
+        </div>
+
+        <!-- 返回主博客的链接（保留导航） -->
+        <div class="back-to-blog">
+            <a href="#" onclick="alert('返回博客首页 (演示链接)'); return false;">← 回到静墨散记首页</a>
+        </div>
+
+        <!-- 极简脚注，模仿博客footer风格 -->
+        <div class="login-footer">
+            <small>© 2026 静墨 · 安全连接</small>
+        </div>
+    </div>
+
+    <!-- 简单的控制台提示 -->
+    <script>
+        console.log('🔐 登录界面演示 — 与博客风格统一，点击登录会弹出提示');
+    </script>
+</body>
+</html>
