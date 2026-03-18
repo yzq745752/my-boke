@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>静墨 · 开发者博客 (仿Coder风格)</title>
+    <!-- 借鉴 coder.com 的现代简洁风格：大标题、三列卡片、标签化行业分类、暗色调点缀 -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f8fafc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #0b1c2e;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航 — 仿Coder简洁黑色条+logo */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+            background-color: #0f1a24;
+            color: #edf2f7;
+            flex-wrap: wrap;
+        }
+
+        .logo a {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -0.3px;
+        }
+        .logo span {
+            color: #5dd4b0; /* 点睛色，类似coder青绿 */
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            font-weight: 500;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #cbd5e0;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: white;
+        }
+        .nav-cta {
+            background-color: #2b4b5c;
+            color: white !important;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            border: 1px solid #3f7e8c;
+        }
+        .nav-cta:hover {
+            background-color: #3d697a;
+        }
+
+        /* 头部主打区域 (hero) — Keeping developers in flow... 那样的大标语 */
+        .hero {
+            padding: 5rem 2rem 4rem 2rem;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            background: linear-gradient(145deg, #0f1f2f, #214457);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 span {
+            background: linear-gradient(145deg, #0a4940, #2f7b6c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero .subhead {
+            font-size: 1.3rem;
+            color: #2d4b61;
+            margin-bottom: 2.5rem;
+            font-weight: 350;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background-color: #1f3e4b;
+            color: white;
+            border: none;
+            padding: 0.9rem 2.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s;
+            border: 1px solid #235b6b;
+        }
+        .btn-primary:hover {
+            background-color: #2c5568;
+        }
+        .btn-outline {
+            background: transparent;
+            color: #1d3d4f;
+            border: 1px solid #8ca3b2;
+            padding: 0.9rem 2.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-outline:hover {
+            background: #e7edf2;
+        }
+
+        /* 模板原句: "Open by design. Secure by default." 风格区域 */
+        .feature-tagline {
+            background-color: #13222e;
+            color: #d6e2ec;
+            text-align: center;
+            padding: 2.5rem 2rem;
+            border-radius: 80px 20px 80px 20px;
+            margin: 3rem 0 4rem 0;
+        }
+        .feature-tagline h2 {
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 0.8rem;
+        }
+        .feature-tagline p {
+            font-size: 1.15rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #adc4d6;
+        }
+
+        /* 卡片三列 — 对应 “Code at speed. Stay in control.” 类似产品特性 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+        @media (max-width: 900px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .card {
+            background-color: #ffffffd9;
+            backdrop-filter: blur(2px);
+            border: 1px solid #dde7f0;
+            border-radius: 28px;
+            padding: 2.2rem 1.8rem;
+            box-shadow: 0 15px 30px -12px rgba(0,30,50,0.15);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #9ec2d4;
+        }
+        .card-icon {
+            font-size: 2.2rem;
+            margin-bottom: 1.2rem;
+        }
+        .card h3 {
+            font-size: 1.7rem;
+            font-weight: 550;
+            margin-bottom: 1rem;
+            color: #0e293b;
+        }
+        .card p {
+            color: #2d4b5e;
+            margin-bottom: 1.8rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        .card-link {
+            text-decoration: none;
+            font-weight: 600;
+            color: #126b77;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            border-bottom: 1px solid transparent;
+            transition: border 0.2s;
+        }
+        .card-link:hover {
+            border-bottom: 1px solid #14808f;
+        }
+
+        /* 分类行业卡片 — 对应 Tech Innovators / Financial Services / Government Agencies */
+        .industry-section {
+            margin: 5rem 0 3rem 0;
+        }
+        .section-label {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            color: #5a7a8c;
+            margin-bottom: 0.5rem;
+        }
+        .industry-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0 4rem;
+        }
+        .industry-card {
+            background-color: #edf5f9;
+            border-radius: 32px;
+            padding: 2.2rem 2rem;
+            border-left: 8px solid;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0,32,64,0.05);
+        }
+        .industry-card:nth-child(1) { border-left-color: #43b3a0; } /* tech */
+        .industry-card:nth-child(2) { border-left-color: #3a7999; } /* financial */
+        .industry-card:nth-child(3) { border-left-color: #596f82; } /* government */
+        .industry-card h4 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+            color: #122c3b;
+        }
+        .industry-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.8rem 0;
+        }
+        .industry-card li {
+            padding: 0.4rem 0;
+            color: #1d485a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .industry-card li::before {
+            content: "▹";
+            color: #0b5e6e;
+            font-weight: bold;
+        }
+        .industry-link {
+            text-decoration: none;
+            font-weight: 600;
+            color: #0e4b56;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* 博客主体 — 用原网站结构巧妙映射成 博文卡片区域 (与产品卡对应) */
+        .recent-posts {
+            margin: 5rem 0;
+        }
+        .recent-posts h2 {
+            font-size: 2.2rem;
+            font-weight: 450;
+            color: #092734;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #aac6d4;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+        @media (max-width:700px) {
+            .post-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .post-item {
+            background: white;
+            border-radius: 28px;
+            padding: 2rem;
+            border: 1px solid #cbdae3;
+            box-shadow: 0 8px 16px -10px #a7b9c4;
+        }
+        .post-cat {
+            display: inline-block;
+            background-color: #cbdae3;
+            padding: 0.2rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 0.8rem;
+            color: #1c4353;
+        }
+        .post-title {
+            font-size: 1.7rem;
+            font-weight: 550;
+            line-height: 1.3;
+            margin: 0.5rem 0 0.8rem 0;
+        }
+        .post-title a {
+            text-decoration: none;
+            color: #07222e;
+        }
+        .post-title a:hover {
+            color: #197a8c;
+        }
+        .post-meta {
+            color: #4f6f81;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1.2rem;
+        }
+        .post-excerpt {
+            color: #1b4454;
+            margin-bottom: 1.4rem;
+        }
+
+        /* footer 借鉴原站简洁底栏 */
+        .footer {
+            background-color: #0b1a23;
+            color: #9db1bf;
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+            border-radius: 40px 40px 0 0;
+        }
+        .footer .container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .footer a {
+            color: #cbdbe8;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: white;
+        }
+        .footer-copyright {
+            font-size: 0.9rem;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #cbdae3;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 导航栏 完全仿Coder暗色简洁风格 -->
+<div class="navbar">
+    <div class="logo"><a href="#">静墨·<span>散记</span></a></div>
+    <div class="nav-links">
+        <a href="#">博客</a>
+        <a href="#">归档</a>
+        <a href="#">关于</a>
+        <a href="#">现在</a>
+        <a href="#" class="nav-cta">订阅</a>
+    </div>
+</div>
+
+<!-- HERO 区域 — 对应 "Keeping developers in flow ..." 变成博客标语 -->
+<section class="hero">
+    <h1>Keeping <span>writers in flow</span> and their ideas running safely.</h1>
+    <p class="subhead">部署在你自己思绪里的数字花园，为灵感和草稿提供一致的书写环境。</p>
+    <div class="hero-cta">
+        <a href="#" class="btn-primary">开始阅读</a>
+        <a href="#" class="btn-outline">浏览文章 →</a>
+    </div>
+</section>
+
+<!-- 第一个特性标语 — Open by design. Secure by default. 精炼改写 -->
+<div class="container">
+    <div class="feature-tagline">
+        <h2>✎ 开放如日记 · 安静如书架</h2>
+        <p>每一篇文章都用 markdown 写成，托管在你信任的地方。从草稿箱到发布，完全由你掌控。</p>
+    </div>
+</div>
+
+<!-- 三卡片网格 — 对应 Coder 的三个特性卡片 (Code at speed / Govern AI agents / Developer-first) 转化为博客功能 -->
+<div class="container">
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">📝</div>
+            <h3>沉浸书写</h3>
+            <p>极简的编辑体验，无干扰的全屏模式，让思绪跟随键盘流淌。支持多种标记语法与即时预览。</p>
+            <a href="#" class="card-link">探索写作体验 →</a>
+        </div>
+        <div class="card">
+            <div class="card-icon">⚙️</div>
+            <h3>版本花园</h3>
+            <p>每篇文章都保留修改历史，像代码一样管理你的创作。可随时回退到某次灵感闪光的时刻。</p>
+            <a href="#" class="card-link">查看版本记录 →</a>
+        </div>
+        <div class="card">
+            <div class="card-icon">🔒</div>
+            <h3>私有·公开</h3>
+            <p>草稿完全私有，发布后可以设定为公开或仅限特定读者。数据由你保管，支持自托管部署。</p>
+            <a href="#" class="card-link">了解隐私模式 →</a>
+        </div>
+    </div>
+</div>
+
+<!-- 行业分类卡片 — 完全按照原网站 Tech Innovators / Financial Services / Government Agencies 结构，但转变为博客专栏分类 -->
+<div class="container industry-section">
+    <div class="section-label">专栏与读者</div>
+    <div class="industry-grid">
+        <!-- 对应 Tech Innovators -->
+        <div class="industry-card">
+            <h4>📱 随笔散客</h4>
+            <ul>
+                <li>轻盈的日常观察与片段</li>
+                <li>旅行、器物、城市漫游</li>
+                <li>每周一则手记</li>
+            </ul>
+            <a href="#" class="industry-link">进入随笔 →</a>
+        </div>
+        <!-- 对应 Financial Services 稳健风格 -->
+        <div class="industry-card">
+            <h4>📚 慢书房</h4>
+            <ul>
+                <li>深度阅读笔记与书评</li>
+                <li>经典文本的当代解读</li>
+                <li>一个月一本细读</li>
+            </ul>
+            <a href="#" class="industry-link">进入书房 →</a>
+        </div>
+        <!-- 对应 Government Agencies — 极客/代码 -->
+        <div class="industry-card">
+            <h4>💻 代码与偶然</h4>
+            <ul>
+                <li>编程小记、工具折腾</li>
+                <li>开源精神与数字花园</li>
+                <li>技术向人文的散步</li>
+            </ul>
+            <a href="#" class="industry-link">进入代码 →</a>
+        </div>
+    </div>
+</div>
+
+<hr class="container">
+
+<!-- 近期文章区域 (额外突出博客本身内容) 但依旧保留在模板框架内 -->
+<div class="container recent-posts">
+    <h2>📌 最近更新</h2>
+    <div class="post-grid">
+        <article class="post-item">
+            <span class="post-cat">随笔散客</span>
+            <h3 class="post-title"><a href="#">在京都公交站等一趟通向山谷的车</a></h3>
+            <div class="post-meta"><span>2026.03.14</span><span>☕ 5分钟</span></div>
+            <p class="post-excerpt">站牌上写着“往 高雄”，不是台湾的高雄，是京都北边的山。忽然觉得公交线路像血管，把城市的人慢慢输送到自然里……</p>
+            <a href="#" class="card-link">继续阅读 →</a>
+        </article>
+        <article class="post-item">
+            <span class="post-cat">慢书房</span>
+            <h3 class="post-title"><a href="#">重读《冬日笔记》—— 保罗·奥斯特的停顿</a></h3>
+            <div class="post-meta"><span>2026.03.02</span><span>☕ 8分钟</span></div>
+            <p class="post-excerpt">“你走进冬日，你走出自己。” 这本书是关于记忆的碎片，也让我想起为什么要写博客：把那些即将融化的瞬间变成文字……</p>
+            <a href="#" class="card-link">继续阅读 →</a>
+        </article>
+    </div>
+</div>
+
+<!-- 页脚 — 借鉴 Coder 简洁大气的脚注 -->
+<div class="footer">
+    <div class="container">
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="logo" style="color:white;">静墨·散记</div>
+            <div style="max-width:300px;">个人博客，自 2017 年至今。记录阅读、旅行与偶然的代码。</div>
+        </div>
+        <div style="display: flex; gap: 4rem; flex-wrap: wrap;">
+            <div>
+                <strong style="color:white;">栏目</strong><br>
+                <a href="#">随笔</a><br>
+                <a href="#">书房</a><br>
+                <a href="#">代码</a>
+            </div>
+            <div>
+                <strong style="color:white;">联系</strong><br>
+                <a href="#">关于</a><br>
+                <a href="#">订阅</a><br>
+                <a href="#">GitHub</a>
+            </div>
+        </div>
+    </div>
+    <div class="container footer-copyright" style="margin-top: 2rem; border-top: 1px solid #2a4353; padding-top: 2rem;">
+        © 2026 静墨 · 由学习 Coder.com 风格的手艺人构建 · 数据由你掌控
+    </div>
+</div>
+
+<!-- 控制台轻提示（同前） -->
+<script>
+    console.log('📐 个人博客 · 仿 Coder 官网风格 | “安静如书架，开放如日记”');
+</script>
+</body>
+</html>
